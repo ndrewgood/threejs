@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
+
+    <script type="module">
+	
+	function getRandomInt(min, max) {
+  		min = Math.ceil(min);
+  		max = Math.floor(max);
+		  return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+		}
+
+	var effect, group;
+
+	import { AsciiEffect } from './effects/asciieffect.js';
+
+    var scene = new THREE.Scene();
+    
+    var camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight, 0.1, 1000);
+    camera.position.z = 4;
+
+    var renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setClearColor('#e5e5e5');
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    effect = new AsciiEffect( renderer, ' .:-+*=%@#', { invert: true } );
+	effect.setSize( window.innerWidth, window.innerHeight );
+	effect.domElement.style.color = 'white';
+	effect.domElement.style.backgroundColor = 'black';
+
+	document.body.appendChild( effect.domElement );
+
+    window.addEventListener('resize', () => {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+
+		camera.updateProjectionMatrix();
+		effect.setSize( window.innerWidth, window.innerHeight );
+    })
+
+
+    var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    var material = new THREE.MeshLambertMaterial( {color: 0xffff00} );
+
+	group = new THREE.Group();
+
+	//for loop which loops 1000 times
+
+	for ( var i = 0; i < 100; i ++ ) {
+
+		// For every i, it creates:
+		//     a mesh(which combines geo and mat)
+		//     a random x, y, and z for said mesh
+		//     a random x and y rotation for said mesh
+		//     sets matrix auto update as false (?)
+		//     updates the matrix
+		//     adds the mesh to the group
+
+
+		var mesh = new THREE.Mesh( geometry, material );
+		mesh.position.x = getRandomInt(-70,70)
+		mesh.position.y = getRandomInt(-70,70)
+		mesh.position.z = getRandomInt(-10,-60)
+
+		mesh.rotation.x = Math.random() * 2 * Math.PI;
+		mesh.rotation.y = Math.random() * 2 * Math.PI;
+
+		mesh.matrixAutoUpdate = false;
+		mesh.updateMatrix();
+
+		group.add( mesh );
+		}
+
+		scene.add( group );
+
+
+		var light = new THREE.PointLight(0xFFFFFF, 1, 500);
+		light.position.set(10,0,25);
+		scene.add( light );
+
+		var render = function(){
+			requestAnimationFrame(render);
+			effect.render(scene, camera);
+    }
+
+    render();
+    
+    </script>
+</body>
+</html>

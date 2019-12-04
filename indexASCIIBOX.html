@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>3</title>
+    <link type="text/css" rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+    <script src="js/three.js"></script>
+	<script src="js/stats.min.js"></script>
+
+    <script type="module">
+
+        var camera, scene, renderer, stats, group;
+
+        //
+        var effect;
+        
+        var box;
+
+        var mouseX = 0, mouseY = 0;
+
+        var windowHalfX = window.innerWidth / 2;
+        var windowHalfY = window.innerHeight / 2;
+
+        //
+        import { AsciiEffect } from './effects/asciieffect.js';
+
+        init();
+        animate();
+
+        function init() {
+
+            camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
+            camera.position.z = 500;
+
+            scene = new THREE.Scene();
+			scene.background = new THREE.Color( 0x00000 );
+            scene.fog = new THREE.Fog( 0x00000, 1, 10000 );
+            
+            var geometry = new THREE.BoxGeometry( 10, 10, 10 );
+            var material = new THREE.MeshLambertMaterial( {color: 0xffff00} );
+            box = new THREE.Mesh( geometry, material );
+
+            box.position.set(2,2,450);
+            box.rotation.set(45,45,0);
+            
+            scene.add( box );
+
+            var light = new THREE.PointLight(0xFFFFFF, 1, 500);
+            light.position.set(10,0,490);
+            scene.add( light );
+
+            renderer = new THREE.WebGLRenderer({antialias: true});
+            renderer.setPixelRatio( window.devicePixelRatio );
+            renderer.setClearColor('#e5e5e5');
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            //
+            effect = new AsciiEffect( renderer, ' .:-+*=%@#', { invert: true } );
+			effect.setSize( window.innerWidth, window.innerHeight );
+			effect.domElement.style.color = 'white';
+			effect.domElement.style.backgroundColor = 'black';
+
+            document.body.appendChild( effect.domElement );
+
+            document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
+            window.addEventListener( 'resize', onWindowResize, false );
+
+        }
+
+        function onWindowResize() {
+
+        windowHalfX = window.innerWidth / 2;
+        windowHalfY = window.innerHeight / 2;
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize( window.innerWidth, window.innerHeight );
+
+        //
+        effect.setSize( window.innerWidth, window.innerHeight );
+
+        }
+
+        function onDocumentMouseMove( event ) {
+
+        mouseX = ( event.clientX - windowHalfX ) * 10;
+        mouseY = ( event.clientY - windowHalfY ) * 10;
+
+        }
+
+        function animate() {
+                    
+        requestAnimationFrame( animate );
+
+        render();
+
+        }
+
+        function render() {
+
+        var time = Date.now() * 0.001;
+
+        box.position.y = Math.sin(time * 2.5) * 4;
+        console.log(box.position.y)
+
+        var rx = time * 0.5,
+			ry = time * 0.5,
+            rz = time * 0.3;
+            
+            box.rotation.x = rx;
+            box.rotation.x += ((mouseY/2000) - box.rotation.x) * .3;
+			box.rotation.y = ry;
+            box.rotation.y += ((mouseX/2000) - box.rotation.y) * .3;
+            box.rotation.z = rz;
+
+
+        //   
+        effect.render( scene, camera );
+
+        }
+    
+    </script>
+</body>
+</html>

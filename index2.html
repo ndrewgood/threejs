@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
+
+    <script>
+    
+
+    var camera, scene, renderer;
+			var geometry, material, mesh;
+
+			function setup() {
+
+				var W = window.innerWidth, H = window.innerHeight;
+				renderer = new THREE.WebGLRenderer();
+				renderer.setSize( W, H );
+				document.body.appendChild( renderer.domElement );
+
+				camera = new THREE.PerspectiveCamera( 50, W/H, 1, 10000 );
+				camera.position.z = 500;
+
+				scene = new THREE.Scene();
+				
+				
+				geometry = new THREE.CubeGeometry(100, 100, 100);
+				material = new THREE.MeshBasicMaterial({shading: THREE.FlatShading});
+				mesh = new THREE.Mesh(geometry, material);
+				scene.add(mesh);
+
+
+			}
+
+			function draw() {
+
+				requestAnimationFrame( draw );
+				
+                var randomColor = Math.random() * 0xffffff;
+				mesh.material.color.setHex(randomColor);
+				
+				
+				// ** NOTE ** only 'Basic', 'Lambert' and 'Phong'
+				// 	material have a color property, the
+				//	'Normal' material has no color property
+
+            
+            				/* -------------------------------------- 
+		        	try also, moving and/or spinning your mesh
+		        	add the code below to your draw() function
+		        	-------------------------------------- */
+		        	mesh.position.x = Math.sin( Date.now() * 0.001 ) * 50;  
+				mesh.rotation.z = Date.now() * 0.0005;
+
+
+            }
+
+				/* -------------------------------------- 
+		        	try also leaving trails
+		        	replace the 'renderer = new ...' on line 27
+				in the setup() function, with the code below
+		        	-------------------------------------- */
+
+
+			setup();
+            draw();
+            
+            
+
+
+    </script>
+</body>
+</html>

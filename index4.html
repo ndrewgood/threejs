@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>3</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link type="text/css" rel="stylesheet" href="css/main.css">
+	</head>
+	<body>
+
+		<script src="js/three.js"></script>
+		<script src="js/stats.min.js"></script>
+
+		<script>
+            //initial set up of variables
+
+			var camera, scene, renderer, stats, group, cube;
+
+            //sets up where the mouse's X and Y value are initially
+
+			var mouseX = 0, mouseY = 0;
+
+            //sets up var for half weight and height
+
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+
+            //basically setup(); and draw();
+
+			init();
+			animate();
+
+			function init() {
+
+                //  1). creates perspective camera with
+                //          FOV = 60
+                //          aspect ratio of width/height
+                //          near and far value
+                //  2). sets the camera at a Z of 500
+
+				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.z = 500;
+
+                // initalizes a scene
+                // sets scene background color
+                // sets fog color and values
+
+				scene = new THREE.Scene();
+				scene.background = new THREE.Color( 0x00000 );
+
+				var geo = new THREE.BoxBufferGeometry( 100, 100, 100 );
+				var mat = new THREE.MeshNormalMaterial( {color: 0x00ff00} );
+
+				cube = new THREE.Mesh( geo, mat );
+				cube.rotation.set( 45, 20 , 0)
+
+
+				scene.add(cube);
+
+				
+				light = new THREE.PointLight( 0xff0000, 1, 100 );
+				light.position.set( 200, 100, 0 );
+
+				scene.add( light );
+
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+                renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
+				
+			}
+
+			function onWindowResize() {
+
+                //updates Half X and Half Y var
+            
+            	windowHalfX = window.innerWidth / 2;
+				windowHalfY = window.innerHeight / 2;
+
+                //updates camera aspect ratio
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+                // updates renderer size
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function onDocumentMouseMove( event ) {
+
+                // distorts mouse move (?) 
+
+				mouseX = ( event.clientX - windowHalfX ) / 5;
+				mouseY = ( event.clientY - windowHalfY ) / 5;
+
+			}
+
+			//
+
+			function animate() {
+
+                // requests animation frame
+                // renders every frame
+                // updates stats
+
+				requestAnimationFrame( animate );
+
+				render();
+				// stats.update();
+
+			}
+
+			
+			// var mouse = new THREE.Vector3( mouseX, mouseY, 0 );
+
+			
+			var clock = new THREE.Clock();
+			var speed = 2; //units a second
+			var delta = 0;
+
+
+
+			function render() {
+
+                //sets up time using date()
+
+				
+				
+				 delta = clock.getDelta();
+				console.log(delta);
+
+
+				// var mouse = new THREE.Vector3( mouseX, mouseY, 0 );
+				// var blank = new THREE.Vector3(0,0,0)
+				// blank.lerp(mouse, .7)
+
+
+
+				// cube.position.set( mouseX, mouseY * -1, 0 );
+				// cube.rotation.set( blank.x / 50, blank.y / 50, 0 );
+				
+                //renders scene through renderer
+
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+
+	</body>
+</html>

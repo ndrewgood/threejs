@@ -3,20 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <title>3</title>
-    <link type="text/css" rel="stylesheet" href="css/main.css">
+    <title>Hey</title>
+    <link type="text/css" rel="stylesheet" href="../css/main.css">
 </head>
 <body>
 
-    <script src="js/three.js"></script>
-	<script src="js/stats.min.js"></script>
+    <script src="../js/three.js"></script>
+	<script src="../js/stats.min.js"></script>
 
     <script type="module">
 
         var camera, scene, renderer, stats, group;
 
         //
-        var effect;
         
         var font, text, textGeo, loader
 
@@ -26,44 +25,42 @@
         var windowHalfY = window.innerHeight / 2;
 
         //
-        import { AsciiEffect } from './effects/asciieffect.js';
-
         init();
         animate();
  
 
-        // function loadFont() {
-        //     var loader = new THREE.FontLoader();
-        //     loader.load('fonts/Archivo_Black_Regular.json', function (res) {
-        //         font = res;
-        //         createText();
-        //     });
-        // }
+        function loadFont() {
+            var loader = new THREE.FontLoader();
+            loader.load('fonts/Archivo_Black_Regular.json', function (res) {
+                font = res;
+                createText();
+            });
+        }
 
-        // function createText() {
-        //         textGeo = new THREE.TextGeometry( 'AG', {
-        //         font: font,
-        //         size: 40,
-        //         height: 15,
-        //         curveSegments: 4,
-        //         weight: "normal",
-        //         bevelThickness: 1,
-        //         bevelSize:0.3,
-        //         bevelSegments: 3,
-        //         bevelEnabled: true
-        //     });
-        //     textGeo.computeBoundingBox();
-        //     var material = new THREE.MeshNormalMaterial();
-        //     textGeo.computeVertexNormals();
-        //     text = new THREE.Mesh(textGeo, material)
-        //     text.position.x = -textGeo.boundingBox.max.x/2;
-        //     text.castShadow = true;
+        function createText() {
+                textGeo = new THREE.TextGeometry( 'AG', {
+                font: font,
+                size: 40,
+                height: 15,
+                curveSegments: 4,
+                weight: "normal",
+                bevelThickness: 1,
+                bevelSize:0.3,
+                bevelSegments: 3,
+                bevelEnabled: true
+            });
+            textGeo.computeBoundingBox();
+            var material = new THREE.MeshNormalMaterial();
+            textGeo.computeVertexNormals();
+            text = new THREE.Mesh(textGeo, material)
+            text.position.x = -textGeo.boundingBox.max.x/2;
+            text.castShadow = true;
 
-        //     text.rotation.x = -.7
+            text.rotation.x = -.7
 
             
-        //     scene.add(text)
-        // }
+            scene.add(text)
+        }
 
 
 
@@ -137,12 +134,6 @@
             renderer.setClearColor('#e5e5e5');
             renderer.setSize(window.innerWidth, window.innerHeight);
 
-            //
-            effect = new AsciiEffect( renderer, ' .:-+*=%@#', { invert: true } );
-			effect.setSize( window.innerWidth, window.innerHeight );
-			effect.domElement.style.color = 'white';
-			effect.domElement.style.backgroundColor = 'black';
-
             document.body.appendChild( renderer.domElement );
 
             document.addEventListener( 'mousemove', onDocumentMouseMove, false );
@@ -164,8 +155,6 @@
         renderer.setSize( window.innerWidth, window.innerHeight );
 
         //
-        effect.setSize( window.innerWidth, window.innerHeight );
-
         }
 
         function onDocumentMouseMove( event ) {

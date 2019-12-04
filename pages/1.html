@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>3</title>
+		<title>1</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link type="text/css" rel="stylesheet" href="css/main.css">
+		<link type="text/css" rel="stylesheet" href="../css/main.css">
 	</head>
 	<body>
 
-		<script src="js/three.js"></script>
-		<script src="js/stats.min.js"></script>
+		<script src="../js/three.js"></script>
+		<script src="../js/stats.min.js"></script>
 
-		<script>
+		<script type="module">
             //initial set up of variables
 
-			var camera, scene, renderer, stats, group;
+			var camera, scene, renderer, stats, group, effect;
 
             //sets up where the mouse's X and Y value are initially
 
@@ -24,6 +24,10 @@
 
 			var windowHalfX = window.innerWidth / 2;
 			var windowHalfY = window.innerHeight / 2;
+
+
+			import { AsciiEffect } from '../effects/asciieffect.js';
+
 
             //basically setup(); and draw();
 
@@ -102,11 +106,17 @@
                 // sets renderer width and height
                 // appends renderer to dom
 
-				renderer = new THREE.WebGLRenderer( { antialias: true, preserveDrawingBuffer: true } );
+				renderer = new THREE.WebGLRenderer();
                 // renderer.autoClearColor = false;
                 renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
-				document.body.appendChild( renderer.domElement );
+
+				effect = new AsciiEffect( renderer, ' .:-+*=%@#', { invert: true } );
+				effect.setSize( window.innerWidth, window.innerHeight );
+				effect.domElement.style.color = 'white';
+				effect.domElement.style.backgroundColor = 'black';
+
+				document.body.appendChild( effect.domElement );
 
 				//creates a stat box
 
@@ -138,6 +148,9 @@
                 // updates renderer size
 
 				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				effect.setSize( window.innerWidth, window.innerHeight );
+
 
 			}
 
@@ -194,7 +207,7 @@
 
                 //renders scene through renderer
 
-				renderer.render( scene, camera );
+				effect.render( scene, camera );
 
 			}
 
